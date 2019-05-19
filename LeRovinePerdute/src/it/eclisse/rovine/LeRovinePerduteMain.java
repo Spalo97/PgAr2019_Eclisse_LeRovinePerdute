@@ -1,3 +1,4 @@
+package it.eclisse.rovine;
 
 public class LeRovinePerduteMain {
 
