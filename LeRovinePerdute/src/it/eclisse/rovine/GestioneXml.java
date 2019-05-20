@@ -1,11 +1,14 @@
 package it.eclisse.rovine;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.XMLStreamWriter;
 
 public class GestioneXml {
 	
@@ -17,11 +20,12 @@ public class GestioneXml {
 	private final static String mappa_10000="PgAr_Map_10000.xml";
 	
 	private static String fileSelezionato;
-	private static ArrayList<Città> listaCittà=new ArrayList();
-	private static String dimensioni;
+	private static ArrayList<Città> listaCittà=new ArrayList<Città>();
 	
 	private static XMLInputFactory xmlif=null;
 	private static XMLStreamReader xmlr=null;
+	private static XMLOutputFactory xmlof = null;
+	private static XMLStreamWriter xmlw = null;
 	
 	public GestioneXml() {
 		
@@ -37,7 +41,7 @@ public class GestioneXml {
 			case 5: fileSelezionato=mappa_10000; break;
 		}
 		
-		aperturaFile();
+		inizializzazioneAperturaFile();
 		
 		try{
 			while(xmlr.hasNext()) {
@@ -59,10 +63,7 @@ public class GestioneXml {
 						listaCittà.add(c);
 					}else if(xmlr.getLocalName().equals("link")){
 						listaCittà.get(listaCittà.size()-1).addCollegamento(xmlr.getAttributeValue(0));
-					}else {
-						dimensioni= xmlr.getAttributeValue(0);
 					}
-					break;
 				}
 				xmlr.next();
 			}
@@ -72,12 +73,67 @@ public class GestioneXml {
 		}
 	}
 	
-	private static void aperturaFile() {
+	public static ArrayList<Città> getListaCittà() {
+		return listaCittà;
+	}
+
+	public static void scritturaFile(ArrayList<Città> percorso_metztli,ArrayList<Città> percorso_tonatiuh, int costo_metztli,int costo_tonatiuh) {
+		inizializzazioneScritturaFile();
+		
+		try {
+			xmlw.writeStartElement("routes");
+			xmlw.writeStartElement("route");
+			xmlw.writeAttribute("Team", "Tonatiuh");
+			xmlw.writeAttribute("cost", Integer.toString(costo_tonatiuh));
+			xmlw.writeAttribute("cities", Integer.toString(percorso_tonatiuh.size()));
+			for(int i=0;i<percorso_tonatiuh.size();i++) {
+				xmlw.writeStartElement("city");
+				xmlw.writeAttribute("id",Integer.toString(percorso_tonatiuh.get(i).getId()));
+				xmlw.writeAttribute("name",percorso_tonatiuh.get(i).getNome());
+				xmlw.writeEndElement();
+			}
+			xmlw.writeEndElement();
+			
+			xmlw.writeStartElement("route");
+			xmlw.writeAttribute("Team", "Metztli");
+			xmlw.writeAttribute("cost", Integer.toString(costo_metztli));
+			xmlw.writeAttribute("cities", Integer.toString(percorso_metztli.size()));
+			for(int i=0;i<percorso_metztli.size();i++) {
+				xmlw.writeStartElement("city");
+				xmlw.writeAttribute("id",Integer.toString(percorso_metztli.get(i).getId()));
+				xmlw.writeAttribute("name",percorso_tonatiuh.get(i).getNome());
+				xmlw.writeEndElement();
+			}
+			xmlw.writeEndElement();
+			xmlw.writeEndElement();
+			xmlw.writeEndDocument();
+			xmlw.flush();
+			xmlw.close();
+			
+		}catch(Exception e){
+			System.out.println("Errore nella scrittura del file:");
+			System.out.println(e.getMessage());
+		}
+		
+	}
+	
+	private static void inizializzazioneAperturaFile() {
 		try {
 			xmlif = XMLInputFactory.newInstance();
 			xmlr = xmlif.createXMLStreamReader(fileSelezionato, new FileInputStream(fileSelezionato));
 		} catch (Exception e) {
 			System.out.println("Errore nell'inizializzazione del reader:");
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	private static void inizializzazioneScritturaFile() {
+		try {
+			xmlof = XMLOutputFactory.newInstance();
+			xmlw = xmlof.createXMLStreamWriter(new FileOutputStream("Routes.xml"), "utf-8");
+			xmlw.writeStartDocument("utf-8", "1.0");
+		} catch (Exception e) {
+			System.out.println("Errore nell'inizializzazione del writer:");
 			System.out.println(e.getMessage());
 		}
 	}
