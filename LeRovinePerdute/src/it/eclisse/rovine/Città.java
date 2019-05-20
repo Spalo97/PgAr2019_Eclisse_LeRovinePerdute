@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 public class Città {
 	
-	private String x;
-	private String y;
-	private String h;
-	private String id;
+	private int x;
+	private int y;
+	private int h;
+	private int id;
 	private String nome;
 	private ArrayList<String> idCollegamenti=new ArrayList();
 	
@@ -18,35 +18,35 @@ public class Città {
 		return idCollegamenti.add(id);
 	}
 
-	public String getX() {
+	public int getX() {
 		return x;
 	}
 
-	public void setX(String x) {
+	public void setX(int x) {
 		this.x = x;
 	}
 
-	public String getY() {
+	public int getY() {
 		return y;
 	}
 
-	public void setY(String y) {
+	public void setY(int y) {
 		this.y = y;
 	}
 
-	public String getH() {
+	public int getH() {
 		return h;
 	}
 
-	public void setH(String h) {
+	public void setH(int h) {
 		this.h = h;
 	}
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -61,6 +61,4 @@ public class Città {
 	public ArrayList<String> getIdCollegamenti() {
 		return idCollegamenti;
 	}
-
-	
 }

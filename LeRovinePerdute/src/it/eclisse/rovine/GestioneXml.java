@@ -49,11 +49,11 @@ public class GestioneXml {
 						Città c=new Città();
 						for (int i = 0; i < xmlr.getAttributeCount(); i++) {
 							switch(xmlr.getAttributeLocalName(i)) {
-								case "id": c.setId(xmlr.getAttributeValue(i)); break;
+								case "id": c.setId(Integer.parseInt(xmlr.getAttributeValue(i))); break;
 								case "name": c.setNome(xmlr.getAttributeValue(i)); break;
-								case "x": c.setX(xmlr.getAttributeValue(i)); break;
-								case "y": c.setY(xmlr.getAttributeValue(i)); break;
-								case "h": c.setH(xmlr.getAttributeValue(i)); break;
+								case "x": c.setX(Integer.parseInt(xmlr.getAttributeValue(i))); break;
+								case "y": c.setY(Integer.parseInt(xmlr.getAttributeValue(i))); break;
+								case "h": c.setH(Integer.parseInt(xmlr.getAttributeValue(i))); break;
 							}
 						}
 						listaCittà.add(c);
