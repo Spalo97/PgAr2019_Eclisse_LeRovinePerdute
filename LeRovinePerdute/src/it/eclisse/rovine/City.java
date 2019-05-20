@@ -2,19 +2,19 @@ package it.eclisse.rovine;
 
 import java.util.ArrayList;
 
-public class Città {
+public class City{
 	
 	private int x;
 	private int y;
 	private int h;
 	private int id;
-	private String nome;
-	private ArrayList<String> idCollegamenti=new ArrayList();
+	private String name;
+	private ArrayList<Integer> idCollegamenti=new ArrayList<Integer>();
 	
-	public Città() {
+	public City() {
 	}
 	
-	public boolean addCollegamento(String id) {
+	public boolean addCollegamento(int id) {
 		return idCollegamenti.add(id);
 	}
 
@@ -51,14 +51,14 @@ public class Città {
 	}
 
 	public String getNome() {
-		return nome;
+		return name;
 	}
 
 	public void setNome(String nome) {
-		this.nome = nome;
+		this.name = nome;
 	}
 
-	public ArrayList<String> getIdCollegamenti() {
+	public ArrayList<Integer> getIdCollegamenti() {
 		return idCollegamenti;
 	}
 }

@@ -12,15 +12,15 @@ import javax.xml.stream.XMLStreamWriter;
 
 public class GestioneXml {
 	
-	private final static String mappa_5="PgAr_Map_5.xml";
-	private final static String mappa_12="PgAr_Map_12.xml";
-	private final static String mappa_50="PgAr_Map_50.xml";
-	private final static String mappa_200="PgAr_Map_200.xml";
-	private final static String mappa_2000="PgAr_Map_2000.xml";
-	private final static String mappa_10000="PgAr_Map_10000.xml";
+	private final static String map_5="PgAr_Map_5.xml";
+	private final static String map_12="PgAr_Map_12.xml";
+	private final static String map_50="PgAr_Map_50.xml";
+	private final static String map_200="PgAr_Map_200.xml";
+	private final static String map_2000="PgAr_Map_2000.xml";
+	private final static String map_10000="PgAr_Map_10000.xml";
 	
-	private static String fileSelezionato;
-	private static ArrayList<Città> listaCittà=new ArrayList<Città>();
+	private static String fileSelected;
+	private static ArrayList<City> listCity=new ArrayList<City>();
 	
 	private static XMLInputFactory xmlif=null;
 	private static XMLStreamReader xmlr=null;
@@ -33,24 +33,24 @@ public class GestioneXml {
 	
 	public static void importXml(int n) {
 		switch(n) {
-			case 0: fileSelezionato=mappa_5; break;
-			case 1: fileSelezionato=mappa_12; break;
-			case 2: fileSelezionato=mappa_50; break;
-			case 3:	fileSelezionato=mappa_200; break;
-			case 4: fileSelezionato=mappa_2000; break;
-			case 5: fileSelezionato=mappa_10000; break;
+			case 0: fileSelected=map_5; break;
+			case 1: fileSelected=map_12; break;
+			case 2: fileSelected=map_50; break;
+			case 3:	fileSelected=map_200; break;
+			case 4: fileSelected=map_2000; break;
+			case 5: fileSelected=map_10000; break;
 		}
 		
-		inizializzazioneAperturaFile();
+		openInitialization();
 		
 		try{
 			while(xmlr.hasNext()) {
 				switch(xmlr.getEventType()){
 				case XMLStreamConstants.START_DOCUMENT: // inizio del documento: stampa che inizia il documento
-					System.out.println("Inizio lettura file: " + fileSelezionato); break;
+					System.out.println("Inizio lettura file: " + fileSelected); break;
 				case XMLStreamConstants.START_ELEMENT: // inizio di un elemento: stampa il nome del tag e i suoi attributi
 					if(xmlr.getLocalName().equals("city")) {
-						Città c=new Città();
+						City c=new City();
 						for (int i = 0; i < xmlr.getAttributeCount(); i++) {
 							switch(xmlr.getAttributeLocalName(i)) {
 								case "id": c.setId(Integer.parseInt(xmlr.getAttributeValue(i))); break;
@@ -60,9 +60,9 @@ public class GestioneXml {
 								case "h": c.setH(Integer.parseInt(xmlr.getAttributeValue(i))); break;
 							}
 						}
-						listaCittà.add(c);
+						listCity.add(c);
 					}else if(xmlr.getLocalName().equals("link")){
-						listaCittà.get(listaCittà.size()-1).addCollegamento(xmlr.getAttributeValue(0));
+						listCity.get(listCity.size()-1).addCollegamento(Integer.parseInt(xmlr.getAttributeValue(0)));
 					}
 				}
 				xmlr.next();
@@ -73,12 +73,12 @@ public class GestioneXml {
 		}
 	}
 	
-	public static ArrayList<Città> getListaCittà() {
-		return listaCittà;
+	public static ArrayList<City> getListCity() {
+		return listCity;
 	}
 
-	public static void scritturaFile(ArrayList<Città> percorso_metztli,ArrayList<Città> percorso_tonatiuh, int costo_metztli,int costo_tonatiuh) {
-		inizializzazioneScritturaFile();
+	public static void writeFile(ArrayList<City> percorso_metztli,ArrayList<City> percorso_tonatiuh, int costo_metztli,int costo_tonatiuh) {
+		writerInitialization();
 		
 		try {
 			xmlw.writeStartElement("routes");
@@ -117,17 +117,17 @@ public class GestioneXml {
 		
 	}
 	
-	private static void inizializzazioneAperturaFile() {
+	private static void openInitialization() {
 		try {
 			xmlif = XMLInputFactory.newInstance();
-			xmlr = xmlif.createXMLStreamReader(fileSelezionato, new FileInputStream(fileSelezionato));
+			xmlr = xmlif.createXMLStreamReader(fileSelected, new FileInputStream(fileSelected));
 		} catch (Exception e) {
 			System.out.println("Errore nell'inizializzazione del reader:");
 			System.out.println(e.getMessage());
 		}
 	}
 	
-	private static void inizializzazioneScritturaFile() {
+	private static void writerInitialization() {
 		try {
 			xmlof = XMLOutputFactory.newInstance();
 			xmlw = xmlof.createXMLStreamWriter(new FileOutputStream("Routes.xml"), "utf-8");
