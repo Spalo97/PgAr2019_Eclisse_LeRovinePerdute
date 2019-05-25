@@ -20,7 +20,7 @@ public class GestioneXml {
 	private final static String map_10000="PgAr_Map_10000.xml";
 	
 	private static String fileSelected;
-	private static ArrayList<City> listCity=new ArrayList<City>();
+	private static ArrayList<City> listCity=new ArrayList<>();
 	
 	private static XMLInputFactory xmlif=null;
 	private static XMLStreamReader xmlr=null;
@@ -30,7 +30,11 @@ public class GestioneXml {
 	public GestioneXml() {
 		
 	}
-	
+
+	public ArrayList<City> getListaCity() {
+		return listCity;
+	}
+
 	public static void importXml(int n) {
 		switch(n) {
 			case 0: fileSelected=map_5; break;

@@ -1,23 +1,29 @@
 package it.eclisse.rovine;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class City{
-	
+	//attributi della citta necessari per il calcolo dei pesi della città
 	private int x;
 	private int y;
 	private int h;
 	private int id;
-	private String name;
-	private ArrayList<Integer> idCollegamenti=new ArrayList<Integer>();
-	
+	private String nome;
+	private LinkedList<Integer> idCollegamenti=new LinkedList<>();
+
+	//costruttore per la creazione di una nuova città vuota
 	public City() {
 	}
-	
-	public boolean addCollegamento(int id) {
-		return idCollegamenti.add(id);
+
+	//costruttore per la creazione di una nuova città
+	public City(int x, int y, int h, int id) {
+		this.x = x;
+		this.y = y;
+		this.h = h;
+		this.id = id;
 	}
 
+	//getter e setter posizione X
 	public int getX() {
 		return x;
 	}
@@ -26,6 +32,8 @@ public class City{
 		this.x = x;
 	}
 
+
+	//getter e setter posizione Y
 	public int getY() {
 		return y;
 	}
@@ -34,6 +42,8 @@ public class City{
 		this.y = y;
 	}
 
+
+	//getter e setter posizione H
 	public int getH() {
 		return h;
 	}
@@ -42,6 +52,8 @@ public class City{
 		this.h = h;
 	}
 
+
+	//getter e setter ID della città
 	public int getId() {
 		return id;
 	}
@@ -50,15 +62,23 @@ public class City{
 		this.id = id;
 	}
 
+
+	//getter e setter nome della città
 	public String getNome() {
-		return name;
+		return nome;
 	}
 
 	public void setNome(String nome) {
-		this.name = nome;
+		this.nome = nome;
 	}
 
-	public ArrayList<Integer> getIdCollegamenti() {
+
+	//metodi per la gestione degli ID delle città collegate alla città in questione
+	public boolean addCollegamento(int id) {
+		return idCollegamenti.add(id);
+	}
+
+	public LinkedList<Integer> getIdCollegamenti() {
 		return idCollegamenti;
 	}
 }
