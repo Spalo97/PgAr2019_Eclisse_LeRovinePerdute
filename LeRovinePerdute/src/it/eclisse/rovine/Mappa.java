@@ -95,7 +95,7 @@ public class Mappa {
 
     public Nodo minimaDistanza(int idDaAnalizzare) {
         int idMin = 0;
-        double pesoMin = Integer.MAX_VALUE;
+        double pesoMin = Double.POSITIVE_INFINITY;
         for(int i: listaCitta.get(idDaAnalizzare).getIdCollegamenti()) {
             double peso = getPeso(listaCitta.get(i).getX(), listaCitta.get(idDaAnalizzare).getX(), listaCitta.get(i).getY(),listaCitta.get(idDaAnalizzare).getY());
             if (peso < idMin) {
