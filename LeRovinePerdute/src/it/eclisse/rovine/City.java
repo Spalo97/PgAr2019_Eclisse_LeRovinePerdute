@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class City{
-	//attributi della citta necessari per il calcolo dei pesi della città
+	/*attributi della citta necessari per il calcolo dei pesi della città*/
 	private int x;
 	private int y;
 	private int h;
@@ -15,11 +15,11 @@ public class City{
 	private double distanza=Double.POSITIVE_INFINITY;
 	private int idPrecedente=-1;
 
-	//costruttore per la creazione di una nuova città vuota
+	/*costruttore per la creazione di una nuova città vuota*/
 	public City() {
 	}
 
-	//costruttore per la creazione di una nuova città
+	/*costruttore per la creazione di una nuova città*/
 	public City(int x, int y, int h, int id) {
 		this.x = x;
 		this.y = y;
@@ -27,7 +27,7 @@ public class City{
 		this.id = id;
 	}
 
-	//getter e setter posizione X
+	/*getter e setter posizione X*/
 	public int getX() {
 		return x;
 	}
@@ -37,7 +37,7 @@ public class City{
 	}
 
 
-	//getter e setter posizione Y
+	/*getter e setter posizione Y*/
 	public int getY() {
 		return y;
 	}
@@ -47,7 +47,7 @@ public class City{
 	}
 
 
-	//getter e setter posizione H
+	/*getter e setter posizione H*/
 	public int getH() {
 		return h;
 	}
@@ -57,7 +57,7 @@ public class City{
 	}
 
 
-	//getter e setter ID della città
+	/*getter e setter ID della città*/
 	public int getId() {
 		return id;
 	}
@@ -67,7 +67,7 @@ public class City{
 	}
 
 
-	//getter e setter nome della città
+	/*getter e setter nome della città*/
 	public String getNome() {
 		return nome;
 	}
@@ -77,7 +77,7 @@ public class City{
 	}
 
 
-	//metodi per la gestione degli ID delle città collegate alla città in questione
+	/*metodi per la gestione degli ID delle città collegate alla città in questione*/
 	public boolean addCollegamento(int id) {
 		return idCollegamenti.add(id);
 	}
@@ -86,6 +86,7 @@ public class City{
 		return idCollegamenti;
 	}
 
+	/*getter e setter della distanza*/
 	public double getDistanza() {
 		return distanza;
 	}
@@ -94,6 +95,7 @@ public class City{
 		this.distanza = distanza;
 	}
 
+	/*getter e setter dell'ID precedente*/
 	public int getIdPrecedente() {
 		return idPrecedente;
 	}
