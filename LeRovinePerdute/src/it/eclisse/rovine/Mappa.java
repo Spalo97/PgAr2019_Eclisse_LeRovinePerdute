@@ -38,40 +38,61 @@ public class Mappa {
 
 
     public void algoritmoDijkstra(int idIniziale) {
+        cittaDiRiferimento = listaCitta.get(idIniziale);
         while (!listaCitta.isEmpty()) {
-            cittaDiRiferimento = listaCitta.get(idIniziale);
-            if (idIniziale == 0) {
+            if (cittaDiRiferimento.getId() == 0) {
                 nodoMinore.setId(cittaDiRiferimento.getId());
                 nodoMinore.setDistanza(0);
                 nodoMinore.setIdPrecedente(-1);
             }
-            listaNodi.add(nodoMinore);
+            Nodo nodoAggiunto = nodoMinore;
+            listaNodi.add(nodoAggiunto);
 
             double distanzaDaAggiungere = nodoMinore.getDistanza();
             nodoMinore.setDistanza(Double.POSITIVE_INFINITY);
 
             for (int idCollegato: cittaDiRiferimento.getIdCollegamenti()) {
+                boolean ctrl = true;
                 Nodo nodoDaAggiungere = new Nodo();
                 nodoDaAggiungere.setId(idCollegato);
-                nodoDaAggiungere.setDistanza(getPeso(listaCitta.get(idCollegato).getX(), cittaDiRiferimento.getX(), listaCitta.get(idCollegato).getY(), cittaDiRiferimento.getY())+distanzaDaAggiungere);
+
+                int x = calcolaValore(listaCitta, idCollegato, true);
+                int y = calcolaValore(listaCitta, idCollegato, false);
+
+                nodoDaAggiungere.setDistanza(getPeso(x, cittaDiRiferimento.getX(), y, cittaDiRiferimento.getY())+distanzaDaAggiungere);
                 nodoDaAggiungere.setIdPrecedente(cittaDiRiferimento.getId());
                 for (Nodo cityDaControllare: cittaRimaste) {
                     if (cityDaControllare.getId() == nodoDaAggiungere.getId()) {
                         if (nodoDaAggiungere.getDistanza() < cityDaControllare.getDistanza()) {
                             cityDaControllare.setDistanza(nodoDaAggiungere.getDistanza());
+                            ctrl = false;
                         }
                     }
                 }
-                if (nodoDaAggiungere.getDistanza() < nodoMinore.getDistanza()) {
-                    nodoMinore.setId(nodoDaAggiungere.getId());
-                    nodoMinore.setIdPrecedente(nodoDaAggiungere.getIdPrecedente());
-                    nodoMinore.setDistanza(nodoDaAggiungere.getDistanza());
-                }
-                else {
-                    cittaRimaste.add(nodoDaAggiungere);
+                if (ctrl) {
+                    if (nodoDaAggiungere.getDistanza() < nodoMinore.getDistanza()) {
+                        nodoMinore.setId(nodoDaAggiungere.getId());
+                        nodoMinore.setIdPrecedente(nodoDaAggiungere.getIdPrecedente());
+                        nodoMinore.setDistanza(nodoDaAggiungere.getDistanza());
+                    }
+                    else {
+                        cittaRimaste.add(nodoDaAggiungere);
+                    }
                 }
             }
+//            for (City citta: listaCitta) {
+//                if (citta.getId() == nodoMinore.getId()) {
+//                    cittaDiRiferimento = citta;
+//                    break;
+//                }
+//            }
             listaCitta.remove(cittaDiRiferimento);
+            for (City citta: listaCitta) {
+                if (citta.getId() == nodoMinore.getId()) {
+                    cittaDiRiferimento = citta;
+                    break;
+                }
+            }
             if (!listaCitta.isEmpty()) {
                 for (Nodo citta: cittaRimaste) {
                     if (citta.getDistanza() < nodoMinore.getDistanza()) {
@@ -92,6 +113,21 @@ public class Mappa {
 
     public void setListaCitta() {
         this.listaCitta = GestioneXml.getListCity();
+    }
+
+    public int calcolaValore(ArrayList<City> lista, int id, boolean isX) {
+        int val = 0;
+        for (City elemento: lista) {
+            if (elemento.getId() == id) {
+                if (isX) {
+                    val = elemento.getX();
+                }
+                else {
+                    val = elemento.getY();
+                }
+            }
+        }
+        return val;
     }
 
     public City scegliCittaDaLista(int indice) {
