@@ -3,6 +3,7 @@ package it.eclisse.rovine;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
@@ -20,7 +21,7 @@ public class GestioneXml {
 	private final static String map_10000="PgAr_Map_10000.xml";
 	
 	private static String fileSelected;
-	private static ArrayList<City> listCity=new ArrayList<>();
+	private final static LinkedList<City> listCity=new LinkedList<>();
 	
 	private static XMLInputFactory xmlif=null;
 	private static XMLStreamReader xmlr=null;
@@ -29,10 +30,6 @@ public class GestioneXml {
 	
 	public GestioneXml() {
 		
-	}
-
-	public ArrayList<City> getListaCity() {
-		return listCity;
 	}
 
 	public static void importXml(int n) {
@@ -77,18 +74,18 @@ public class GestioneXml {
 		}
 	}
 	
-	public static ArrayList<City> getListCity() {
+	public static LinkedList<City> getListCity() {
 		return listCity;
 	}
 
-	public static void writeFile(ArrayList<City> percorso_metztli,ArrayList<City> percorso_tonatiuh, int costo_metztli,int costo_tonatiuh) {
+	public static void writeFile(LinkedList<City> percorso_metztli,LinkedList<City> percorso_tonatiuh, double costo,double costo2) {
 		writerInitialization();
 		
 		try {
 			xmlw.writeStartElement("routes");
 			xmlw.writeStartElement("route");
 			xmlw.writeAttribute("Team", "Tonatiuh");
-			xmlw.writeAttribute("cost", Integer.toString(costo_tonatiuh));
+			xmlw.writeAttribute("cost", Double.toString(costo2));
 			xmlw.writeAttribute("cities", Integer.toString(percorso_tonatiuh.size()));
 			for(int i=0;i<percorso_tonatiuh.size();i++) {
 				xmlw.writeStartElement("city");
@@ -100,7 +97,7 @@ public class GestioneXml {
 			
 			xmlw.writeStartElement("route");
 			xmlw.writeAttribute("Team", "Metztli");
-			xmlw.writeAttribute("cost", Integer.toString(costo_metztli));
+			xmlw.writeAttribute("cost", Double.toString(costo));
 			xmlw.writeAttribute("cities", Integer.toString(percorso_metztli.size()));
 			for(int i=0;i<percorso_metztli.size();i++) {
 				xmlw.writeStartElement("city");

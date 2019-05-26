@@ -6,181 +6,102 @@ import java.util.LinkedList;
 
 public class Mappa {
 
-    private LinkedList<Nodo> listaNodi = new LinkedList<>(); //Elenco dei nodi che inizialmente sarà vuoto
-    private ArrayList<City> listaCitta = new ArrayList<>(); //Lista delle città ottenute dall'XML
-    private LinkedList<Nodo> listaFinale = new LinkedList<>();
-
-    private Nodo nodoMinore = new Nodo();
-    private City cittaDiRiferimento = new City();
-    private ArrayList<Nodo> cittaRimaste = new ArrayList<>();
-
-    public LinkedList<Nodo> calcolaMappa(int lunghezza) {
-        lunghezza--;
-        int idDaCercare = -1;
-        setListaCitta();
-        algoritmoDijkstra(listaCitta.get(0).getId());
-        for (Nodo nodo: listaNodi) {
-            if (nodo.getId() == lunghezza) {
-                listaFinale.add(nodo);
-                idDaCercare = nodo.getIdPrecedente();
-            }
-            else if (nodo.getId() == idDaCercare) {
-                listaFinale.add(nodo);
-                idDaCercare = nodo.getIdPrecedente();
-            }
-            if (nodo.getId() == 0) {
-                break;
-            }
-        }
-        Collections.reverse(listaFinale);
-        return listaFinale;
+    private LinkedList<City> listaCitta = new LinkedList<>(); //Lista delle città ottenute dall'XML
+    private LinkedList<City> percorso = new LinkedList<>();
+    
+    private LinkedList<City> cittaControllate= new LinkedList<>();
+    private Double costoTotale=0.0;
+    private City campoBase;
+    private City rovinePerdute;
+    private int idPesoMinore;
+    private int size;
+    
+    private int idMaggiore=0;
+    
+    public Mappa() {
+    	listaCitta=GestioneXml.getListCity();
     }
 
-
-    public void algoritmoDijkstra(int idIniziale) {
-        cittaDiRiferimento = listaCitta.get(idIniziale);
-        while (!listaCitta.isEmpty()) {
-            if (cittaDiRiferimento.getId() == 0) {
-                nodoMinore.setId(cittaDiRiferimento.getId());
-                nodoMinore.setDistanza(0);
-                nodoMinore.setIdPrecedente(-1);
-            }
-            Nodo nodoAggiunto = nodoMinore;
-            listaNodi.add(nodoAggiunto);
-
-            double distanzaDaAggiungere = nodoMinore.getDistanza();
-            nodoMinore.setDistanza(Double.POSITIVE_INFINITY);
-
-            for (int idCollegato: cittaDiRiferimento.getIdCollegamenti()) {
-                boolean ctrl = true;
-                Nodo nodoDaAggiungere = new Nodo();
-                nodoDaAggiungere.setId(idCollegato);
-
-                int x = calcolaValore(listaCitta, idCollegato, true);
-                int y = calcolaValore(listaCitta, idCollegato, false);
-
-                nodoDaAggiungere.setDistanza(getPeso(x, cittaDiRiferimento.getX(), y, cittaDiRiferimento.getY())+distanzaDaAggiungere);
-                nodoDaAggiungere.setIdPrecedente(cittaDiRiferimento.getId());
-                for (Nodo cityDaControllare: cittaRimaste) {
-                    if (cityDaControllare.getId() == nodoDaAggiungere.getId()) {
-                        if (nodoDaAggiungere.getDistanza() < cityDaControllare.getDistanza()) {
-                            cityDaControllare.setDistanza(nodoDaAggiungere.getDistanza());
-                            ctrl = false;
-                        }
-                    }
-                }
-                if (ctrl) {
-                    if (nodoDaAggiungere.getDistanza() < nodoMinore.getDistanza()) {
-                        nodoMinore.setId(nodoDaAggiungere.getId());
-                        nodoMinore.setIdPrecedente(nodoDaAggiungere.getIdPrecedente());
-                        nodoMinore.setDistanza(nodoDaAggiungere.getDistanza());
-                    }
-                    else {
-                        cittaRimaste.add(nodoDaAggiungere);
-                    }
-                }
-            }
-//            for (City citta: listaCitta) {
-//                if (citta.getId() == nodoMinore.getId()) {
-//                    cittaDiRiferimento = citta;
-//                    break;
-//                }
-//            }
-            listaCitta.remove(cittaDiRiferimento);
-            for (City citta: listaCitta) {
-                if (citta.getId() == nodoMinore.getId()) {
-                    cittaDiRiferimento = citta;
-                    break;
-                }
-            }
-            if (!listaCitta.isEmpty()) {
-                for (Nodo citta: cittaRimaste) {
-                    if (citta.getDistanza() < nodoMinore.getDistanza()) {
-                        nodoMinore.setId(citta.getId());
-                        nodoMinore.setIdPrecedente(citta.getIdPrecedente());
-                        nodoMinore.setDistanza(citta.getDistanza());
-                    }
-                }
-                //algoritmoDijkstra(nodoMinore.getId());
-            }
-            else {
-                listaNodi.add(nodoMinore);
-                System.out.println("Fatto!");
-            }
-        }
+    public LinkedList<City> calcolaPercorso() {
+    	size=GestioneXml.getListCity().size();
+    	while(!listaCitta.isEmpty()) {
+    		idPesoMinore=getIdPesoMinore();
+    		if(idPesoMinore==size) {
+    			City campoBase=listaCitta.getFirst();
+    			for(int i=0;i<campoBase.getIdCollegamenti().size();i++) {
+    				City vicino=getCitta(campoBase.getIdCollegamenti().get(i));
+    				vicino.setDistanza(getPeso(campoBase.getX(),vicino.getX(),campoBase.getY(),vicino.getY()));
+    				vicino.setIdPrecedente(campoBase.getId());
+    			}
+    			cittaControllate.add(campoBase);
+    			listaCitta.remove(campoBase);
+    		}else {
+    			City T=getCitta(idPesoMinore);
+    			for(int i=0;i<T.getIdCollegamenti().size();i++) {
+    				City vicino=getCitta(T.getIdCollegamenti().get(i));   				
+    					double distanza =T.getDistanza()+getPeso(T.getX(),vicino.getX(),T.getY(),vicino.getY());
+    					if(distanza<vicino.getDistanza()) {
+		    				vicino.setDistanza(distanza);
+		    				vicino.setIdPrecedente(T.getId());
+    					}
+    			}
+    			if(idMaggiore<T.getId()) {
+    				idMaggiore=cittaControllate.size();
+    			}
+    			cittaControllate.add(T);
+    			removeCitta(T.getId());
+    		}
+    	}
+    	
+    	rovinePerdute=cittaControllate.get(idMaggiore);
+    	
+    	do{
+    		percorso.add(rovinePerdute);
+    		costoTotale+=rovinePerdute.getDistanza();
+    		rovinePerdute=getCitta(rovinePerdute.getIdPrecedente());
+    	}while(rovinePerdute!=campoBase);
+    	
+    	return percorso;
     }
-
-
-    public void setListaCitta() {
-        this.listaCitta = GestioneXml.getListCity();
+    
+    private City getCitta(int id) {
+    	City citta=new City();
+    	for(City c:GestioneXml.getListCity()) {
+    		if(id==c.getId())
+    			citta=c;
+    	}
+		return citta;
     }
-
-    public int calcolaValore(ArrayList<City> lista, int id, boolean isX) {
-        int val = 0;
-        for (City elemento: lista) {
-            if (elemento.getId() == id) {
-                if (isX) {
-                    val = elemento.getX();
-                }
-                else {
-                    val = elemento.getY();
-                }
-            }
-        }
-        return val;
+    
+    private void removeCitta(int id) {
+    	for(int i=0;i<listaCitta.size();i++) {
+    		if(id==listaCitta.get(i).getId())
+    			listaCitta.remove(i);
+    	}
     }
-
-    public City scegliCittaDaLista(int indice) {
-        int ascissaX = listaCitta.get(indice).getX();
-        int ordinataY = listaCitta.get(indice).getY();
-        int altezzaH = listaCitta.get(indice).getH();
-        int nuovoId = listaCitta.get(indice).getId();
-        City cittaInizializzata = new City(ascissaX, ordinataY, altezzaH,nuovoId);
-        return cittaInizializzata;
+    
+    private int getIdPesoMinore() {
+    	int id=GestioneXml.getListCity().size();
+    	double costo=Double.POSITIVE_INFINITY;
+    	for(City c:listaCitta) {
+    		if(c.getDistanza()<costo)
+    			id=c.getId();
+    	}
+    	return id;
     }
-
+    
     public double getPeso(int x0, int x1, int y0, int y1) {
         double x = Math.pow(x0-x1, 2);
         double y = Math.pow(y0-y1, 2);
         return Math.sqrt(x+y);
     }
-
-    public Nodo minimaDistanza(int idDaAnalizzare) {
-        int idMin = 0;
-        double pesoMin = Double.POSITIVE_INFINITY;
-        for(int i: listaCitta.get(idDaAnalizzare).getIdCollegamenti()) {
-            double peso = getPeso(listaCitta.get(i).getX(), listaCitta.get(idDaAnalizzare).getX(), listaCitta.get(i).getY(),listaCitta.get(idDaAnalizzare).getY());
-            if (peso < idMin) {
-                idMin = i;
-                pesoMin = peso;
-            }
-        }
-        Nodo nodoVicino = new Nodo(idMin, pesoMin, idDaAnalizzare);
-        return nodoVicino;
+    
+    public double getCostoTotale() {
+    	return costoTotale;
     }
 
-//    public void algoritmoDijkstra(int idIniziale) {
-//        //per ogni città esistente viene definito una distanza infinita dall'ID precedente e si imposta ID precedente sconosciuto(-1)
-//        for (City citta: listaCitta) {
-//            City nuovoNodo = new City(citta.getId(), Integer.MAX_VALUE, -1);
-//            elencoNodi.add(nuovoNodo); //ogni città definita in questo modo viene aggiunta all'elenco dei nodi
-//        }
-//
-//        //il nodo iniziale (che ha id = idIniziale) ha distanza 0 dal nodo precedente, ovvero è esso stesso il nodo di partenza
-//        elencoNodi.get(idIniziale).setDistanza(0);
-//
-//        while (!elencoNodi.isEmpty()) {
-//
-//            Nodo minimo = minimaDistanza(elencoNodi.getFirst().getId()); //calola nodo con minima distanza
-//            int idMinimo = minimo.getId();
-//            elencoNodi.remove(elencoNodi.get(idMinimo));
-//            tabellaRiferimento.add(minimo);
-//
-//            for (int idVicino: listaCitta.get(idMinimo).getIdCollegamenti()) {
-//                if (elencoNodi.getI.contains(listaCitta.get(idVicino))) {
-//
-//                }
-//            }
-//        }
-//    }
+    private void setListaCitta() {
+        this.listaCitta = GestioneXml.getListCity();
+    }
+
 }

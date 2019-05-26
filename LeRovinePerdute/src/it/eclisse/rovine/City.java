@@ -1,5 +1,6 @@
 package it.eclisse.rovine;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class City{
@@ -9,7 +10,10 @@ public class City{
 	private int h;
 	private int id;
 	private String nome;
-	private LinkedList<Integer> idCollegamenti=new LinkedList<>();
+	private ArrayList<Integer> idCollegamenti=new ArrayList<Integer>();
+	
+	private double distanza=Double.POSITIVE_INFINITY;
+	private int idPrecedente;
 
 	//costruttore per la creazione di una nuova città vuota
 	public City() {
@@ -78,7 +82,23 @@ public class City{
 		return idCollegamenti.add(id);
 	}
 
-	public LinkedList<Integer> getIdCollegamenti() {
+	public ArrayList<Integer> getIdCollegamenti() {
 		return idCollegamenti;
+	}
+
+	public double getDistanza() {
+		return distanza;
+	}
+
+	public void setDistanza(double distanza) {
+		this.distanza = distanza;
+	}
+
+	public int getIdPrecedente() {
+		return idPrecedente;
+	}
+
+	public void setIdPrecedente(int idPrecedente) {
+		this.idPrecedente = idPrecedente;
 	}
 }
