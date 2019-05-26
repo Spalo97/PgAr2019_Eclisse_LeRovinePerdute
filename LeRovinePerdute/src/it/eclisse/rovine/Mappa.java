@@ -6,14 +6,20 @@ import java.util.Collections;
 import java.util.LinkedList;
 
 public class Mappa {
-
-    private LinkedList<City> listaCitta = new LinkedList<>(); //Lista delle città ottenute dall'XML
+	/** lista delle città dell'xml*/
+    private LinkedList<City> listaCitta = new LinkedList<>();
+    
+    /** Array che contiene tutti i collegamenti fra le città */
     private ArrayList<City> grafo= new ArrayList<City>();
+    
+    /** Array ottenuti dai rispettivi metodi di calcolo del costo*/
     private LinkedList<City> percorsoTonatiuh = new LinkedList<>();
     private LinkedList<City> percorsoMetztli = new LinkedList<>();
     
+    /** Array che contiene le città già controllate */
     private LinkedList<City> cittaControllate= new LinkedList<>();
 
+    /** Attributi della mappa*/
     private City campoBaseTonatiuh;
     private City rovinePerduteTonatiuh;
     private City campoBaseMetztli;
@@ -21,14 +27,18 @@ public class Mappa {
     private int idPesoMinore;
     private int size;
     
+    /** id delle rovine perdute*/
     private int idMaggiore=0;
+    /** peso dei percorsi delle squadre*/
 	private double costoMetztli=0.0;
     private double costoTonatiuh=0.0;
     
+    /** data come parametro un'Array di città crea la mappa */
     public Mappa(LinkedList<City> listCity) {
     	listaCitta=listCity;
     }
 
+    /** Metodo per il calcolo del percorso dei Tonatiuh  */
     public LinkedList<City> calcolaPercorsoTonatiuh() {
     	setGrafo();
     	size=grafo.size();
@@ -73,6 +83,7 @@ public class Mappa {
     	return percorsoTonatiuh;
     }
     
+    /** Metodo per il calcolo del percorso dei Metztli  */
     public LinkedList<City> calcolaPercorsoMetztli() {
     	reset();
     	
@@ -118,10 +129,12 @@ public class Mappa {
     	return percorsoMetztli;
     }
     
+    /** Getter del costo totale della squadra Metztli*/
     public double getCostoMetztli() {
     	return costoMetztli;
     }
     
+    /** Restituisce un'oggetto di tipo City dato il suo id*/
     private City getCitta(int id) {
     	City citta=new City();
     	for(City c:grafo) {
@@ -131,6 +144,7 @@ public class Mappa {
 		return citta;
     }
     
+    /** riempie l'array di collegamenti*/
     private void setGrafo() {
     	for(int i=0;i<this.listaCitta.size();i++) {
     		City c=new City();
@@ -138,6 +152,8 @@ public class Mappa {
     		grafo.add(c);
     	}
     }
+    
+    /** riempie listaCitta */
     private void resetListaCitta() {
     	for(int i=0;i<this.grafo.size();i++) {
     		City c=new City();
@@ -146,14 +162,14 @@ public class Mappa {
     	}
     }
 
-    
+    /** rimuove le città dalla lista*/
     private void removeCitta(int id) {
     	for(int i=0;i<listaCitta.size();i++) {
     		if(id==listaCitta.get(i).getId())
     			listaCitta.remove(i);
     	}
     }
-    
+    /** restituisce l'id del nodo con peso  minore   */
     private int getIdPesoMinore() {
     	int id=listaCitta.size();
     	double costo=Double.POSITIVE_INFINITY;
@@ -164,20 +180,26 @@ public class Mappa {
     	return id;
     }
     
+    /** Metodo che dato come parametro le coordinate di due città restituisce la distanza fra le due */
     public double getPeso(int x0, int x1, int y0, int y1) {
         double x = Math.pow(x0-x1, 2);
         double y = Math.pow(y0-y1, 2);
         return Math.sqrt(x+y);
     }
-    
+    /** Metodo che dato come parametro la quota di due città restituisce la differenza 
+     * fra le due quote */
     private int getPesoMetztli(int h1,int h2) {
     	return Math.abs(h1-h2);
     }
     
+    /** Getter costo totale del percorso Tonatiuh */
     public double getCostoTonatiuh() {
     	return costoTonatiuh;
     }
     
+    /**imposta la distanza inziale a infinito e imposta gli id dei precedenti a -1 
+     * in modo da analizzare in modo corretto la mappa e resettarla
+     * dopo il caclcolo del percorso della prima squadra */
     private void reset() {
     	for(int i=0;i<grafo.size();i++) {
     		grafo.get(i).setDistanza(Double.POSITIVE_INFINITY);

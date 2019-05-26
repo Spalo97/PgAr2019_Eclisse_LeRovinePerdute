@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class City{
-	/*attributi della citta necessari per il calcolo dei pesi della città*/
+	/**attributi della citta necessari per il calcolo dei pesi della città*/
 	private int x;
 	private int y;
 	private int h;
@@ -15,11 +15,11 @@ public class City{
 	private double distanza=Double.POSITIVE_INFINITY;
 	private int idPrecedente=-1;
 
-	/*costruttore per la creazione di una nuova città vuota*/
+	/**costruttore per la creazione di una nuova città vuota*/
 	public City() {
 	}
 
-	/*costruttore per la creazione di una nuova città*/
+	/**costruttore per la creazione di una nuova città*/
 	public City(int x, int y, int h, int id) {
 		this.x = x;
 		this.y = y;
@@ -27,7 +27,7 @@ public class City{
 		this.id = id;
 	}
 
-	/*getter e setter posizione X*/
+	/**getter e setter posizione X*/
 	public int getX() {
 		return x;
 	}
@@ -37,7 +37,7 @@ public class City{
 	}
 
 
-	/*getter e setter posizione Y*/
+	/**getter e setter posizione Y*/
 	public int getY() {
 		return y;
 	}
@@ -47,7 +47,7 @@ public class City{
 	}
 
 
-	/*getter e setter posizione H*/
+	/**getter e setter posizione H*/
 	public int getH() {
 		return h;
 	}

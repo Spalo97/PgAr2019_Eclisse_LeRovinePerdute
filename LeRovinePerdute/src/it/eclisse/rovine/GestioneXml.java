@@ -2,7 +2,9 @@ package it.eclisse.rovine;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.InputMismatchException;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
@@ -12,7 +14,7 @@ import javax.xml.stream.XMLStreamWriter;
 
 public class GestioneXml {
 
-	/*dichiarazione dei file XML*/
+	/**dichiarazione dei file XML*/
 	private String map_5="PgAr_Map_5.xml";
 	private String map_12="PgAr_Map_12.xml";
 	private String map_50="PgAr_Map_50.xml";
@@ -20,8 +22,8 @@ public class GestioneXml {
 	private  String map_2000="PgAr_Map_2000.xml";
 	private String map_10000="PgAr_Map_10000.xml";
 	
-	private String fileSelected; /*attributo del nome del file xml su cui lavorare*/
-	private LinkedList<City> listCity=new LinkedList<>(); /*LinkedList delle citta prelevate dal file XML*/
+	private String fileSelected; /**attributo del nome del file xml su cui lavorare*/
+	private LinkedList<City> listCity=new LinkedList<>(); /**LinkedList delle citta prelevate dal file XML*/
 
 	/*attributi per la gestione dei file XML*/
 	private XMLInputFactory xmlif=null;
@@ -33,7 +35,7 @@ public class GestioneXml {
 
 	}
 
-	/*metodo per l'importazione dei file XML*/
+	/**metodo per l'importazione dei file XML*/
 	public void importXml(int n) {
 		switch(n) {
 			case 0: fileSelected=map_5; break;
@@ -76,12 +78,12 @@ public class GestioneXml {
 		}
 	}
 
-	/*getter della lista delle citta*/
+	/**getter della lista delle citta*/
 	public LinkedList<City> getListCity() {
 		return listCity;
 	}
 
-	/*metodo per la scrittura del file XML dati LinkedList dei percorsi e i costi totali per ogni percorso*/
+	/**metodo per la scrittura del file XML dati LinkedList dei percorsi e i costi totali per ogni percorso*/
 	public void writeFile(LinkedList<City> percorso_metztli,LinkedList<City> percorso_tonatiuh, double costo_metztli,double costo_tonatiuh) {
 		writerInitialization();
 		
@@ -122,7 +124,7 @@ public class GestioneXml {
 		
 	}
 
-	/*metodo di inizializzazione della lettura del file XML*/
+	/**metodo di inizializzazione della lettura del file XML*/
 	private void openInitialization() {
 		try {
 			xmlif = XMLInputFactory.newInstance();
@@ -133,7 +135,7 @@ public class GestioneXml {
 		}
 	}
 
-	/*metodo di ininzializzazione della scrittura del file XML*/
+	/**metodo di ininzializzazione della scrittura del file XML*/
 	private void writerInitialization() {
 		try {
 			xmlof = XMLOutputFactory.newInstance();
@@ -143,5 +145,33 @@ public class GestioneXml {
 			System.out.println("Errore nell'inizializzazione del writer:");
 			System.out.println(e.getMessage());
 		}
+	}
+	
+	/** metodo che permette all'utente di scegliere la mappa*/
+	public int sceltamappa() {
+		int scelta = 0;
+		boolean finito = false;
+		Scanner lettore = new Scanner(System.in);
+		do {
+			System.out.print("SCEGLI UNA MAPPA:\n");
+			System.out.print("[0] Map_5 \n");
+			System.out.print("[1] Map_12 \n");
+			System.out.print("[2] Map_50 \n");
+			System.out.print("[3] Map_200 \n");
+			System.out.print("[4] Map_2000 \n");
+			System.out.print("[5] Map_10000 \n");
+			try {
+				scelta = lettore.nextInt();
+				if (scelta >5) {
+					System.out.println("ERRORE: INSERISCI UN VALORE CORRETTO!");
+				}else {
+					finito = true;
+				}
+			} catch (InputMismatchException e) {
+				System.out.println("ERRORE: INSERISCI UN VALORE CORRETTO!");
+				String trashString = lettore.next();
+			}
+		} while (!finito);
+		return scelta;
 	}
 }
