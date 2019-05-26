@@ -5,11 +5,14 @@ import java.util.LinkedList;
 public class LeRovinePerduteMain {
 	
 	public static void main(String[] args) {
-		Mappa mappa = new Mappa();
-		GestioneXml.importXml(0);
-		LinkedList<City> percorso=mappa.calcolaPercorso();
-		double costo=mappa.getCostoTotale();
-		GestioneXml.writeFile(percorso, percorso, costo, costo);
+		GestioneXml gestione=new GestioneXml();
+		Mappa mappa=new Mappa(gestione.getListCity());
+		gestione.importXml(5);
+		LinkedList<City> percorsoTonatiuh=mappa.calcolaPercorsoTonatiuh();
+		LinkedList<City> percorsoMetztli=mappa.calcolaPercorsoMetztli();
+		double costoTonatiuh=mappa.getCostoTonatiuh();
+		double costoMetztli=mappa.getCostoMetztli();
+		gestione.writeFile(percorsoTonatiuh, percorsoMetztli, costoMetztli, costoTonatiuh);
 		System.out.println("Fatto!");
 	}
 

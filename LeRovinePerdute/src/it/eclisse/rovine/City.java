@@ -13,7 +13,7 @@ public class City{
 	private ArrayList<Integer> idCollegamenti=new ArrayList<Integer>();
 	
 	private double distanza=Double.POSITIVE_INFINITY;
-	private int idPrecedente;
+	private int idPrecedente=-1;
 
 	//costruttore per la creazione di una nuova città vuota
 	public City() {

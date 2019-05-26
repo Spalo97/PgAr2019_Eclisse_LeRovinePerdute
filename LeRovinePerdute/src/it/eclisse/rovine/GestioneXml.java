@@ -13,26 +13,26 @@ import javax.xml.stream.XMLStreamWriter;
 
 public class GestioneXml {
 	
-	private final static String map_5="PgAr_Map_5.xml";
-	private final static String map_12="PgAr_Map_12.xml";
-	private final static String map_50="PgAr_Map_50.xml";
-	private final static String map_200="PgAr_Map_200.xml";
-	private final static String map_2000="PgAr_Map_2000.xml";
-	private final static String map_10000="PgAr_Map_10000.xml";
+	private String map_5="PgAr_Map_5.xml";
+	private String map_12="PgAr_Map_12.xml";
+	private String map_50="PgAr_Map_50.xml";
+	private String map_200="PgAr_Map_200.xml";
+	private  String map_2000="PgAr_Map_2000.xml";
+	private String map_10000="PgAr_Map_10000.xml";
 	
-	private static String fileSelected;
-	private final static LinkedList<City> listCity=new LinkedList<>();
+	private String fileSelected;
+	private LinkedList<City> listCity=new LinkedList<>();
 	
-	private static XMLInputFactory xmlif=null;
-	private static XMLStreamReader xmlr=null;
-	private static XMLOutputFactory xmlof = null;
-	private static XMLStreamWriter xmlw = null;
+	private XMLInputFactory xmlif=null;
+	private XMLStreamReader xmlr=null;
+	private XMLOutputFactory xmlof = null;
+	private XMLStreamWriter xmlw = null;
 	
 	public GestioneXml() {
 		
 	}
 
-	public static void importXml(int n) {
+	public void importXml(int n) {
 		switch(n) {
 			case 0: fileSelected=map_5; break;
 			case 1: fileSelected=map_12; break;
@@ -74,18 +74,18 @@ public class GestioneXml {
 		}
 	}
 	
-	public static LinkedList<City> getListCity() {
+	public LinkedList<City> getListCity() {
 		return listCity;
 	}
 
-	public static void writeFile(LinkedList<City> percorso_metztli,LinkedList<City> percorso_tonatiuh, double costo,double costo2) {
+	public void writeFile(LinkedList<City> percorso_metztli,LinkedList<City> percorso_tonatiuh, double costo_metztli,double costo_tonatiuh) {
 		writerInitialization();
 		
 		try {
 			xmlw.writeStartElement("routes");
 			xmlw.writeStartElement("route");
 			xmlw.writeAttribute("Team", "Tonatiuh");
-			xmlw.writeAttribute("cost", Double.toString(costo2));
+			xmlw.writeAttribute("cost", Double.toString(costo_tonatiuh));
 			xmlw.writeAttribute("cities", Integer.toString(percorso_tonatiuh.size()));
 			for(int i=0;i<percorso_tonatiuh.size();i++) {
 				xmlw.writeStartElement("city");
@@ -97,7 +97,7 @@ public class GestioneXml {
 			
 			xmlw.writeStartElement("route");
 			xmlw.writeAttribute("Team", "Metztli");
-			xmlw.writeAttribute("cost", Double.toString(costo));
+			xmlw.writeAttribute("cost", Double.toString(costo_metztli));
 			xmlw.writeAttribute("cities", Integer.toString(percorso_metztli.size()));
 			for(int i=0;i<percorso_metztli.size();i++) {
 				xmlw.writeStartElement("city");
@@ -118,7 +118,7 @@ public class GestioneXml {
 		
 	}
 	
-	private static void openInitialization() {
+	private void openInitialization() {
 		try {
 			xmlif = XMLInputFactory.newInstance();
 			xmlr = xmlif.createXMLStreamReader(fileSelected, new FileInputStream(fileSelected));
@@ -128,7 +128,7 @@ public class GestioneXml {
 		}
 	}
 	
-	private static void writerInitialization() {
+	private void writerInitialization() {
 		try {
 			xmlof = XMLOutputFactory.newInstance();
 			xmlw = xmlof.createXMLStreamWriter(new FileOutputStream("Routes.xml"), "utf-8");
