@@ -18,34 +18,31 @@ public class MappaTonatiuh extends Mappa{
     		idPesoMinore=getIdPesoMinore();
     		if(idPesoMinore==size) {
     			campoBase=listaCitta.getFirst();
+    			rovinePerdute=listaCitta.getLast();
     			for(int i=0;i<campoBase.getIdCollegamenti().size();i++) {
     				City vicino=getCitta(campoBase.getIdCollegamenti().get(i));
     				vicino.setDistanza(getPeso(campoBase.getX(),vicino.getX(),campoBase.getY(),vicino.getY()));
     				vicino.setIdPrecedente(campoBase.getId());
     			}
-//    			cittaControllate.add(campoBase);
-    			listaCitta.remove(campoBase);
+    			removeCitta(campoBase.getId());
     		}else {
-    			City T=getCitta(idPesoMinore);
-    			for(int i=0;i<T.getIdCollegamenti().size();i++) {
-    				if(checkId(T.getIdCollegamenti().get(i))) {
-	    				City vicino=getCitta(T.getIdCollegamenti().get(i));   				
-	    					double distanza =T.getDistanza()+getPeso(T.getX(),vicino.getX(),T.getY(),vicino.getY());
-	    					if(distanza<vicino.getDistanza() && vicino.getId()!=0) {
-			    				vicino.setDistanza(distanza);
-			    				vicino.setIdPrecedente(T.getId());
-	    					}
-    				}
+    			if(getCitta(idPesoMinore).getId()!=0) {
+	    			City T=getCitta(idPesoMinore);
+	    			for(int i=0;i<T.getIdCollegamenti().size();i++) {
+	    				if(checkId(T.getIdCollegamenti().get(i))) {
+		    				City vicino=getCitta(T.getIdCollegamenti().get(i));   				
+		    					double distanza =T.getDistanza()+getPeso(T.getX(),vicino.getX(),T.getY(),vicino.getY());
+		    					if(distanza<vicino.getDistanza() && vicino.getId()!=0) {
+				    				vicino.setDistanza(distanza);
+				    				vicino.setIdPrecedente(T.getId());
+		    					}
+	    				}
+	    			}
+	    			removeCitta(T.getId());
     			}
-//    			if(idMaggiore<T.getId()) {
-//    				idMaggiore=cittaControllate.size();
-//    			}
-//    			cittaControllate.add(T);
-    			listaCitta.remove(T);
     		}
     	}
     	
-    	rovinePerdute=grafo.get(size-1);
     	costoTotale=rovinePerdute.getDistanza();
     	
     	while(rovinePerdute.getId()!=0){

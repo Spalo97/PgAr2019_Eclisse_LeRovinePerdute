@@ -14,9 +14,6 @@ public class Mappa {
     
     /** Array ottenuti dai rispettivi metodi di calcolo del costo*/
     protected LinkedList<City> percorso = new LinkedList<>();
-    
-   /** Array che contiene le città già controllate */
-    protected LinkedList<City> cittaControllate= new LinkedList<>();
 
     /** Attributi della mappa*/
     protected City campoBase;
@@ -75,16 +72,7 @@ public class Mappa {
     	}
     }
     
-    /** riempie listaCitta */
-    public void resetListaCitta() {
-    	for(int i=0;i<this.grafo.size();i++) {
-    		City c=new City();
-    		c=this.grafo.get(i);
-    		listaCitta.add(c);
-    	}
-    }
-
-    /** rimuove le città dalla lista*/
+    /** rimuove le città dalla lista tramite id*/
     public void removeCitta(int id) {
     	for(int i=0;i<listaCitta.size();i++) {
     		if(id==listaCitta.get(i).getId())
@@ -102,20 +90,4 @@ public class Mappa {
     	return id;
     }
     
-    /**imposta la distanza inziale a infinito e imposta gli id dei precedenti a -1 
-     * in modo da analizzare in modo corretto la mappa e resettarla
-     * dopo il caclcolo del percorso della prima squadra */
-    public void reset() {
-    	for(int i=0;i<grafo.size();i++) {
-    		grafo.get(i).setDistanza(Double.POSITIVE_INFINITY);
-    		grafo.get(i).setIdPrecedente(-1);
-
-    	}
-    	for(int i=0;i<cittaControllate.size();i++) {
-    		cittaControllate.remove();
-    	}
-		idMaggiore=0;
-		idPesoMinore=0;
-    	resetListaCitta();
-    }
 }

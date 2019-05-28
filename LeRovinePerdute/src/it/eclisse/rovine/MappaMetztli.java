@@ -18,13 +18,13 @@ public class MappaMetztli extends Mappa{
     		idPesoMinore=getIdPesoMinore();
     		if(idPesoMinore==size) {
     			campoBase=listaCitta.getFirst();
+    			rovinePerdute=listaCitta.getLast();
     			for(int i=0;i<campoBase.getIdCollegamenti().size();i++) {
     				City vicino=getCitta(campoBase.getIdCollegamenti().get(i));
     				vicino.setDistanza(getPeso(campoBase.getH(),vicino.getH()));
     				vicino.setIdPrecedente(campoBase.getId());
     			}
-//    			cittaControllate.add(campoBase);
-    			listaCitta.remove(campoBase);
+    			removeCitta(campoBase.getId());
     		}else {
     			City T=getCitta(idPesoMinore);
     			for(int i=0;i<T.getIdCollegamenti().size();i++) {
@@ -37,16 +37,11 @@ public class MappaMetztli extends Mappa{
 	    					}
     				}
     			}
-//    			if(idMaggiore<T.getId()) {
-//    				idMaggiore=cittaControllate.size();
-//    			}
-//    			cittaControllate.add(T);
-    			listaCitta.remove(T);
+    			removeCitta(T.getId());
     			
     		}
     	}
-    	
-    	rovinePerdute=grafo.get(size-1);
+    
     	costoTotale=rovinePerdute.getDistanza();
     	
     	while(rovinePerdute.getId()!=0){
