@@ -14,6 +14,8 @@ public class Mappa {
     
     /** Array ottenuti dai rispettivi metodi di calcolo del costo*/
     protected LinkedList<City> percorso = new LinkedList<>();
+    
+    protected ArrayList<City> cittaIrraggiungibili=new ArrayList<City>();
 
     /** Attributi della mappa*/
     protected City campoBase;
@@ -89,7 +91,7 @@ public class Mappa {
     	}
     	return id;
     }
-        
+    
     public void controlloPrecedente() {
     ArrayList<Integer> idPrecedenti=new ArrayList<Integer>();
     for(City c: listaCitta) {
@@ -102,9 +104,7 @@ public class Mappa {
     Collections.sort(idPrecedenti);
     for(int i=0; i<this.size;i++) {
     	if(!idPrecedenti.contains(i)) {
-    		removeCitta(i);
-    		setGrafo();
-    		size=grafo.size();
+    		cittaIrraggiungibili.add(getCitta(i));
     	}
     }
     }

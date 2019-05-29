@@ -14,7 +14,7 @@ public class MappaTonatiuh extends Mappa{
     	importListaCitta();
     	setGrafo();
     	size=grafo.size();
-//    	controlloPrecedente(); bugga perché ci sono città che non hanno precedenti come campoBase
+    	controlloPrecedente(); //bugga perché ci sono città che non hanno precedenti come campoBase
     	while(!listaCitta.isEmpty()) {
     		idPesoMinore=getIdPesoMinore();
     		if(idPesoMinore==size) {
