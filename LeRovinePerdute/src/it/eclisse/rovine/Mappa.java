@@ -19,7 +19,7 @@ public class Mappa {
     protected City campoBase;
     protected City rovinePerdute;
     protected int idPesoMinore;
-    protected int size;
+    protected int size=0;
     
     /** id delle rovine perdute*/
     protected int idMaggiore=0;
@@ -84,10 +84,28 @@ public class Mappa {
     	int id=listaCitta.size();
     	double costo=Double.POSITIVE_INFINITY;
     	for(City c:listaCitta) {
-    		if(c.getDistanza()<costo)
+    		if(c.getDistanza()<costo || id==1)
     			id=c.getId();
     	}
     	return id;
     }
-    
+        
+    public void controlloPrecedente() {
+    ArrayList<Integer> idPrecedenti=new ArrayList<Integer>();
+    for(City c: listaCitta) {
+    	for(int i=0;i<c.getIdCollegamenti().size();i++) {
+    		if(!idPrecedenti.contains(c.getIdCollegamenti().get(i))) {
+    			idPrecedenti.add(c.getIdCollegamenti().get(i));
+    		}
+    	}
+    }
+    Collections.sort(idPrecedenti);
+    for(int i=0; i<this.size;i++) {
+    	if(!idPrecedenti.contains(i)) {
+    		removeCitta(i);
+    		setGrafo();
+    		size=grafo.size();
+    	}
+    }
+    }
 }
